@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Created on Thu Sep 9 10:01:00 2021
+Created on Thu Sep 9 22:01:00 2021
 
 @author: Perry
 """
@@ -26,6 +26,10 @@ class Vector2:
         Calculates and returns the vector's length
     normalized():
         Calculates and returns a normalized representation of this vector (length = 1)
+    dot():
+        Calculates the dot product of this vector and another
+    cross():
+        Calculates the cross product (scalar) of this vector and another
     """
 
     def __init__(self, x, y):
@@ -207,3 +211,41 @@ class Vector2:
         """
 
         return self / self.norm()
+
+    def dot(self, other):
+        """
+        Calculate and return the dot product of this Vector2 and another
+
+        Parameters
+        ----------
+        other : Vector2
+            Vector2 for right-hand operand in dot product
+        
+        Returns
+        -------
+        float
+            Resultant dot product
+        """
+
+        if isinstance(other, Vector2):
+            return (self.x * other.x) + (self.y * other.y)
+        raise TypeError
+
+    def cross(self, other):
+        """
+        Calculate and return the cross product (scalar) of this Vector2 and another
+
+        Parameters
+        ----------
+        other : Vector2
+            Vector2 for right-hand operand in cross product
+        
+        Returns
+        -------
+        float
+            Resultant cross product
+        """
+
+        if isinstance(other, Vector2):
+            return (self.x * other.y) - (self.y * other.x)
+        raise TypeError

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Created on Thu Sep 9 10:59:57 2021
+Created on Thu Sep 9 22:59:57 2021
 
 @author: Perry
 """
@@ -77,5 +77,19 @@ class TestVector2(unittest.TestCase):
         self.assertEqual(Vector2(2, 0).normalized(), Vector2(1, 0))
         self.assertEqual(Vector2(3, 4).normalized(), Vector2(3/5, 4/5))
         self.assertRaises(ZeroDivisionError, Vector2.normalized, Vector2(0, 0))
+
+    def test_dot(self):
+        self.assertEqual(Vector2(0, 0).dot(Vector2(0, 0)), 0)
+        self.assertEqual(Vector2(0, 0).dot(Vector2(1, 1)), 0)
+        self.assertEqual(Vector2(1, 1).dot(Vector2(1, 1)), 2)
+        self.assertEqual(Vector2(1, 2).dot(Vector2(3, 4)), 11)
+        self.assertRaises(TypeError, Vector2(0, 0).cross, 0)
+    
+    def test_cross(self):
+        self.assertEqual(Vector2(0, 0).cross(Vector2(0, 0)), 0)
+        self.assertEqual(Vector2(0, 0).cross(Vector2(1, 1)), 0)
+        self.assertEqual(Vector2(1, 0).cross(Vector2(0, 1)), 1)
+        self.assertEqual(Vector2(1, 2).cross(Vector2(3, 4)), -2)
+        self.assertRaises(TypeError, Vector2(0, 0).cross, 0)
 
 unittest.main(argv=[''],verbosity=2, exit=False)
