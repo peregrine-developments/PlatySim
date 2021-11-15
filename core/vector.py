@@ -4,8 +4,9 @@ Created on Thu Sep 9 22:01:00 2021
 
 @author: Perry
 """
+from __future__ import annotations
+
 import math
-import numbers
 
 class Vector2:
     """
@@ -32,7 +33,7 @@ class Vector2:
         Calculates the cross product (scalar) of this vector and another
     """
 
-    def __init__(self, x, y):
+    def __init__(self, x : float, y : float) -> None:
         """
         Construct all necessary attributes for a Vector2 object
 
@@ -44,13 +45,10 @@ class Vector2:
             y component of the vector
         """
 
-        if not isinstance(x, numbers.Number) or not isinstance(y, numbers.Number):
-            raise TypeError
-
         self.x = x
         self.y = y
 
-    def __str__(self):
+    def __str__(self) -> str:
         """
         Return a simple string representation of a Vector2 object
 
@@ -62,7 +60,7 @@ class Vector2:
 
         return ''.join(["(", str(self.x), ",", str(self.y), ")"])
         
-    def __repr__(self):
+    def __repr__(self) -> str:
         """
         Return a comprehensive string representation of a Vector2 object
 
@@ -74,7 +72,7 @@ class Vector2:
         
         return ''.join(["Vector2(", str(self.x), ",", str(self.y), ")"])
 
-    def __eq__(self, other):
+    def __eq__(self, other : object) -> bool:
         """
         Return the equality of two Vector2 objects
 
@@ -89,11 +87,11 @@ class Vector2:
             Equality of operands
         """
 
-        if isinstance(other, Vector2):
-            return ((self.x == other.x) and (self.y == other.y))
-        raise TypeError
+        if not isinstance(other, Vector2):
+            return NotImplemented
+        return ((self.x == other.x) and (self.y == other.y))
 
-    def __ne__(self, other):
+    def __ne__(self, other : object) -> bool:
         """
         Return the inequality of two Vector2 objects
 
@@ -108,11 +106,11 @@ class Vector2:
             Inequality of operands
         """
 
-        if isinstance(other, Vector2):
-            return ((self.x != other.x) or (self.y != other.y))
-        raise TypeError
+        if not isinstance(other, Vector2):
+            return NotImplemented
+        return ((self.x != other.x) or (self.y != other.y))
 
-    def __add__(self, other):
+    def __add__(self, other : Vector2) -> Vector2:
         """
         Return a sum of two Vector2 objects
 
@@ -127,11 +125,9 @@ class Vector2:
             Componentwise sum of operands
         """
 
-        if isinstance(other, Vector2):
-            return Vector2(self.x + other.x, self.y + other.y)
-        raise TypeError
+        return Vector2(self.x + other.x, self.y + other.y)
 
-    def __sub__(self, other):
+    def __sub__(self, other : Vector2) -> Vector2:
         """
         Return a minutend of two Vector2 objects
 
@@ -146,11 +142,9 @@ class Vector2:
             Componentwise minutend of operands
         """
 
-        if isinstance(other, Vector2):
-            return Vector2(self.x - other.x, self.y - other.y)
-        raise TypeError
+        return Vector2(self.x - other.x, self.y - other.y)
 
-    def __mul__(self, other):
+    def __mul__(self, other : float) -> Vector2:
         """
         Return a scalar multiplication of a Vector2 object
 
@@ -165,11 +159,9 @@ class Vector2:
             Componentwise scalar multiplication of operands
         """
 
-        if isinstance(other, numbers.Number):
-            return Vector2(self.x * other, self.y * other)
-        raise TypeError
+        return Vector2(self.x * other, self.y * other)
 
-    def __truediv__(self, other):
+    def __truediv__(self, other : float) -> Vector2:
         """
         Return a scalar division of a Vector2 object
 
@@ -184,11 +176,9 @@ class Vector2:
             Componentwise scalar division of operands
         """
 
-        if isinstance(other, numbers.Number):
-            return Vector2(self.x / other, self.y / other)
-        raise TypeError
+        return Vector2(self.x / other, self.y / other)
 
-    def norm(self):
+    def norm(self) -> float:
         """
         Calculate and return the length of a Vector2 object
 
@@ -200,7 +190,7 @@ class Vector2:
 
         return math.sqrt(math.pow(self.x, 2) + math.pow(self.y, 2))
 
-    def normalized(self):
+    def normalized(self) -> Vector2:
         """
         Calculate and return a normalized representation of a Vector2 object
 
@@ -212,7 +202,7 @@ class Vector2:
 
         return (self / self.norm())
 
-    def dot(self, other):
+    def dot(self, other : Vector2) -> float:
         """
         Calculate and return the dot product of this Vector2 and another
 
@@ -227,11 +217,9 @@ class Vector2:
             Resultant dot product
         """
 
-        if isinstance(other, Vector2):
-            return ((self.x * other.x) + (self.y * other.y))
-        raise TypeError
+        return ((self.x * other.x) + (self.y * other.y))
 
-    def cross(self, other):
+    def cross(self, other : Vector2) -> float:
         """
         Calculate and return the cross product (scalar) of this Vector2 and another
 
@@ -246,9 +234,7 @@ class Vector2:
             Resultant cross product
         """
 
-        if isinstance(other, Vector2):
-            return ((self.x * other.y) - (self.y * other.x))
-        raise TypeError
+        return ((self.x * other.y) - (self.y * other.x))
 
 class Vector3:
     """
@@ -277,7 +263,7 @@ class Vector3:
         Calculates the cross product of this vector and another
     """
 
-    def __init__(self, x, y, z):
+    def __init__(self, x : float, y : float, z : float) -> None:
         """
         Construct all necessary attributes for a Vector3 object
 
@@ -291,14 +277,11 @@ class Vector3:
             z component of the vector
         """
 
-        if not isinstance(x, numbers.Number) or not isinstance(y, numbers.Number) or not isinstance(z, numbers.Number):
-            raise TypeError
-
         self.x = x
         self.y = y
         self.z = z
 
-    def __str__(self):
+    def __str__(self) -> str:
         """
         Return a simple string representation of a Vector3 object
 
@@ -310,7 +293,7 @@ class Vector3:
 
         return ''.join(["(", str(self.x), ",", str(self.y), ",", str(self.z), ")"])
         
-    def __repr__(self):
+    def __repr__(self) -> str:
         """
         Return a comprehensive string representation of a Vector3 object
 
@@ -322,7 +305,7 @@ class Vector3:
         
         return ''.join(["Vector3(", str(self.x), ",", str(self.y), ",", str(self.z), ")"])
 
-    def __eq__(self, other):
+    def __eq__(self, other : object) -> bool:
         """
         Return the equality of two Vector3 objects
 
@@ -337,11 +320,11 @@ class Vector3:
             Equality of operands
         """
 
-        if isinstance(other, Vector3):
-            return ((self.x == other.x) and (self.y == other.y) and (self.z == other.z))
-        raise TypeError
+        if not isinstance(other, Vector3):
+            return NotImplemented
+        return ((self.x == other.x) and (self.y == other.y) and (self.z == other.z))
 
-    def __ne__(self, other):
+    def __ne__(self, other : object) -> bool:
         """
         Return the inequality of two Vector3 objects
 
@@ -356,11 +339,11 @@ class Vector3:
             Inequality of operands
         """
 
-        if isinstance(other, Vector3):
-            return ((self.x != other.x) or (self.y != other.y) or (self.z != other.z))
-        raise TypeError
+        if not isinstance(other, Vector3):
+            return NotImplemented
+        return ((self.x != other.x) or (self.y != other.y) or (self.z != other.z))
 
-    def __add__(self, other):
+    def __add__(self, other : Vector3) -> Vector3:
         """
         Return a sum of two Vector3 objects
 
@@ -375,11 +358,9 @@ class Vector3:
             Componentwise sum of operands
         """
 
-        if isinstance(other, Vector3):
-            return Vector3(self.x + other.x, self.y + other.y, self.z + other.z)
-        raise TypeError
+        return Vector3(self.x + other.x, self.y + other.y, self.z + other.z)
 
-    def __sub__(self, other):
+    def __sub__(self, other : Vector3) -> Vector3:
         """
         Return a minutend of two Vector3 objects
 
@@ -394,11 +375,9 @@ class Vector3:
             Componentwise minutend of operands
         """
 
-        if isinstance(other, Vector3):
-            return Vector3(self.x - other.x, self.y - other.y, self.z - other.z)
-        raise TypeError
+        return Vector3(self.x - other.x, self.y - other.y, self.z - other.z)
 
-    def __mul__(self, other):
+    def __mul__(self, other : float) -> Vector3:
         """
         Return a scalar multiplication of a Vector3 object
 
@@ -413,11 +392,9 @@ class Vector3:
             Componentwise scalar multiplication of operands
         """
 
-        if isinstance(other, numbers.Number):
-            return Vector3(self.x * other, self.y * other, self.z * other)
-        raise TypeError
+        return Vector3(self.x * other, self.y * other, self.z * other)
 
-    def __truediv__(self, other):
+    def __truediv__(self, other : float) -> Vector3:
         """
         Return a scalar division of a Vector3 object
 
@@ -432,11 +409,9 @@ class Vector3:
             Componentwise scalar division of operands
         """
 
-        if isinstance(other, numbers.Number):
-            return Vector3(self.x / other, self.y / other, self.z / other)
-        raise TypeError
+        return Vector3(self.x / other, self.y / other, self.z / other)
 
-    def norm(self):
+    def norm(self) -> float:
         """
         Calculate and return the length of a Vector3 object
 
@@ -448,7 +423,7 @@ class Vector3:
 
         return math.sqrt(math.pow(self.x, 2) + math.pow(self.y, 2) + math.pow(self.z, 2))
 
-    def normalized(self):
+    def normalized(self) -> Vector3:
         """
         Calculate and return a normalized representation of a Vector3 object
 
@@ -460,7 +435,7 @@ class Vector3:
 
         return (self / self.norm())
 
-    def dot(self, other):
+    def dot(self, other : Vector3) -> float:
         """
         Calculate and return the dot product of this Vector3 and another
 
@@ -475,11 +450,9 @@ class Vector3:
             Resultant dot product
         """
 
-        if isinstance(other, Vector3):
-            return ((self.x * other.x) + (self.y * other.y) + (self.z * other.z))
-        raise TypeError
+        return ((self.x * other.x) + (self.y * other.y) + (self.z * other.z))
 
-    def cross(self, other):
+    def cross(self, other : Vector3) -> Vector3:
         """
         Calculate and return the cross product (scalar) of this Vector3 and another
 
@@ -494,6 +467,4 @@ class Vector3:
             Resultant cross product
         """
 
-        if isinstance(other, Vector3):
-            return Vector3((self.y * other.z) - (self.z * other.y), (self.z * other.x) - (self.x * other.z), (self.x * other.y) - (self.y * other.x))
-        raise TypeError
+        return Vector3((self.y * other.z) - (self.z * other.y), (self.z * other.x) - (self.x * other.z), (self.x * other.y) - (self.y * other.x))
