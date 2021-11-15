@@ -5,9 +5,11 @@ Created on Thu Sep 9 22:01:00 2021
 @author: Perry
 """
 from __future__ import annotations
+from dataclasses import dataclass
 
 import math
 
+@dataclass
 class Vector2:
     """
     A class to represent a two-dimensional vector
@@ -33,7 +35,10 @@ class Vector2:
         Calculates the cross product (scalar) of this vector and another
     """
 
-    def __init__(self, x : float, y : float) -> None:
+    x : float = 0
+    y : float = 0
+
+    def __init__(self, x : float = 0, y : float = 0) -> None:
         """
         Construct all necessary attributes for a Vector2 object
 
@@ -236,6 +241,7 @@ class Vector2:
 
         return ((self.x * other.y) - (self.y * other.x))
 
+@dataclass
 class Vector3:
     """
     A class to represent a three-dimensional vector
@@ -263,7 +269,7 @@ class Vector3:
         Calculates the cross product of this vector and another
     """
 
-    def __init__(self, x : float, y : float, z : float) -> None:
+    def __init__(self, x : float = 0, y : float = 0, z : float = 0) -> None:
         """
         Construct all necessary attributes for a Vector3 object
 

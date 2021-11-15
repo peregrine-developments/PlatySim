@@ -5,8 +5,12 @@ Created on Thu Sep 9 22:35:27 2021
 @author: Perry
 """
 from __future__ import annotations
+from dataclasses import dataclass
+from typing import Union, overload
 
 import math
+
+from vector import Vector3
 
 class Quaternion:
     """
@@ -36,9 +40,9 @@ class Quaternion:
     
     """
 
-    def __init__(self, w : float, x : float, y : float, z : float) -> None:
+    def __init__(self, w : float = 0, x : float = 0, y : float = 0, z : float = 0) -> None:
         """
-        Construct all necessary attributes for a Vector2 object
+        Construct all necessary attributes for a Quaternion object
 
         Parameters
         ----------
@@ -52,6 +56,23 @@ class Quaternion:
             z imaginary component of the quaternion
         """
 
-        
+        self.w = z
         self.x = x
         self.y = y
+        self.z = z
+
+    @classmethod
+    def FromVector(cls, other : Vector3) -> Quaternion:
+        return cls(0, other.x, other.y, other.z)
+
+    @overload
+    def __mul__(self, other : Vector3) -> Vector3: ...
+    @overload
+    def __mul__(self, other : Quaternion) -> Quaternion: ...
+    
+    def __mul__(self, other : Union[Vector3, Quaternion]) -> Union[Vector3, Quaternion]:
+        ret = Quaternion()
+        if isinstance(other, Vector3):
+            return Vector3(0, 0, 0)
+        else:
+            return Quaternion(0, 0, 0, 0)
