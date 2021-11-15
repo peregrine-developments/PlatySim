@@ -263,11 +263,15 @@ class Vector3:
         Calculates and returns the vector's length
     normalized():
         Calculates and returns a normalized representation of this vector (length = 1)
-    dot():
+    dot():it d
         Calculates the dot product of this vector and another
     cross():
         Calculates the cross product of this vector and another
     """
+
+    x : float = 0
+    y : float = 0
+    z : float = 0
 
     def __init__(self, x : float = 0, y : float = 0, z : float = 0) -> None:
         """

@@ -19,5 +19,3 @@ physics = Simulation()
 
 if __name__ == "__main__":
     physics.run()
-
-vectortest = vector.Vector2()

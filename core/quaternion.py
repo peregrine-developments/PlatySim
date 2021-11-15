@@ -10,8 +10,9 @@ from typing import Union, overload
 
 import math
 
-from vector import Vector3
+from .vector import *
 
+@dataclass
 class Quaternion:
     """
     A class to represent a quaternion
@@ -39,6 +40,11 @@ class Quaternion:
         Calculates and returns the quaternion's conjugate
     
     """
+
+    w : float = 0
+    x : float = 0
+    y : float = 0
+    z : float = 0
 
     def __init__(self, w : float = 0, x : float = 0, y : float = 0, z : float = 0) -> None:
         """

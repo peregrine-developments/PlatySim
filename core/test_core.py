@@ -4,7 +4,8 @@ Created on Thu Sep 9 22:59:57 2021
 
 @author: Perry
 """
-from vector import *
+from .vector import *
+from .quaternion import *
 import unittest
 import operator
 
