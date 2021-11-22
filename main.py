@@ -5,17 +5,17 @@ Created on Sun Nov 14 18:39:13 2021
 @author: Perry
 """
 
-from core import vector
+import math
 
-class Simulation:
-    """
-    Main simulation manager and execution class
-    """
+from core.vector import *
+from core.quaternion import *
 
-    def run(self, dt : float = 0.01) -> bool:
-        return False
+unit = Quaternion(1, 0, 0, 0)
 
-physics = Simulation()
+vector = Vector3(9.8, 0, 0)
 
-if __name__ == "__main__":
-    physics.run()
+rotation_aa = Quaternion.FromAxisAngle(math.pi / 2, 0, 1, 0)
+rotation_euler = Quaternion.FromEuler(0, math.pi / 2, 0)
+
+print(vector * rotation_aa)
+print(vector * rotation_euler)
