@@ -53,6 +53,10 @@ class Vector2:
         self.x = x
         self.y = y
 
+    @classmethod
+    def Zero(cls) -> Vector2:
+        return cls(0, 0)
+
     def __str__(self) -> str:
         """
         Return a simple string representation of a Vector2 object
@@ -130,6 +134,8 @@ class Vector2:
             Componentwise sum of operands
         """
 
+        if not isinstance(other, Vector2):
+            return NotImplemented
         return Vector2(self.x + other.x, self.y + other.y)
 
     def __sub__(self, other : Vector2) -> Vector2:
@@ -147,6 +153,8 @@ class Vector2:
             Componentwise minutend of operands
         """
 
+        if not isinstance(other, Vector2):
+            return NotImplemented
         return Vector2(self.x - other.x, self.y - other.y)
 
     def __mul__(self, other : float) -> Vector2:
@@ -164,6 +172,8 @@ class Vector2:
             Componentwise scalar multiplication of operands
         """
 
+        if not isinstance(other, float):
+            return NotImplemented
         return Vector2(self.x * other, self.y * other)
 
     def __truediv__(self, other : float) -> Vector2:
@@ -181,6 +191,8 @@ class Vector2:
             Componentwise scalar division of operands
         """
 
+        if not isinstance(other, float):
+            return NotImplemented
         return Vector2(self.x / other, self.y / other)
 
     def norm(self) -> float:
@@ -205,7 +217,10 @@ class Vector2:
             Normalized vector representation
         """
 
-        return (self / self.norm())
+        vecLen = self.norm()
+        if vecLen == 0:
+            return Vector2.Zero()
+        return (self / vecLen)
 
     def dot(self, other : Vector2) -> float:
         """
@@ -222,6 +237,8 @@ class Vector2:
             Resultant dot product
         """
 
+        if not isinstance(other, Vector2):
+            return NotImplemented
         return ((self.x * other.x) + (self.y * other.y))
 
     def cross(self, other : Vector2) -> float:
@@ -239,6 +256,8 @@ class Vector2:
             Resultant cross product
         """
 
+        if not isinstance(other, Vector2):
+            return NotImplemented
         return ((self.x * other.y) - (self.y * other.x))
 
 @dataclass
@@ -290,6 +309,10 @@ class Vector3:
         self.x = x
         self.y = y
         self.z = z
+
+    @classmethod
+    def Zero(cls) -> Vector3:
+        return cls(0, 0, 0)
 
     def __str__(self) -> str:
         """
@@ -368,6 +391,8 @@ class Vector3:
             Componentwise sum of operands
         """
 
+        if not isinstance(other, Vector3):
+            return NotImplemented
         return Vector3(self.x + other.x, self.y + other.y, self.z + other.z)
 
     def __sub__(self, other : Vector3) -> Vector3:
@@ -385,6 +410,8 @@ class Vector3:
             Componentwise minutend of operands
         """
 
+        if not isinstance(other, Vector3):
+            return NotImplemented
         return Vector3(self.x - other.x, self.y - other.y, self.z - other.z)
 
     def __mul__(self, other : float) -> Vector3:
@@ -402,6 +429,8 @@ class Vector3:
             Componentwise scalar multiplication of operands
         """
 
+        if not isinstance(other, float):
+            return NotImplemented
         return Vector3(self.x * other, self.y * other, self.z * other)
 
     def __truediv__(self, other : float) -> Vector3:
@@ -419,6 +448,8 @@ class Vector3:
             Componentwise scalar division of operands
         """
 
+        if not isinstance(other, float):
+            return NotImplemented
         return Vector3(self.x / other, self.y / other, self.z / other)
 
     def norm(self) -> float:
@@ -443,7 +474,10 @@ class Vector3:
             Normalized vector representation
         """
 
-        return (self / self.norm())
+        vecLen = self.norm()
+        if vecLen == 0:
+            return Vector3.Zero()
+        return (self / vecLen)
 
     def dot(self, other : Vector3) -> float:
         """
@@ -460,6 +494,8 @@ class Vector3:
             Resultant dot product
         """
 
+        if not isinstance(other, Vector3):
+            return NotImplemented
         return ((self.x * other.x) + (self.y * other.y) + (self.z * other.z))
 
     def cross(self, other : Vector3) -> Vector3:
@@ -473,8 +509,10 @@ class Vector3:
         
         Returns
         -------
-        float
+        Vector3
             Resultant cross product
         """
 
+        if not isinstance(other, Vector3):
+            return NotImplemented
         return Vector3((self.y * other.z) - (self.z * other.y), (self.z * other.x) - (self.x * other.z), (self.x * other.y) - (self.y * other.x))

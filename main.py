@@ -5,17 +5,28 @@ Created on Sun Nov 14 18:39:13 2021
 @author: Perry
 """
 
-from core import vector
+import math
 
-class Simulation:
-    """
-    Main simulation manager and execution class
-    """
+from core.vector import *
+from core.quaternion import *
+from sim.physics import Rigidbody
 
-    def run(self, dt : float = 0.01) -> bool:
-        return False
+running = True
 
-physics = Simulation()
+testBody = Rigidbody()
 
-if __name__ == "__main__":
-    physics.run()
+simElapsedTime = 0
+simDT = 0.01
+
+while running:
+    print(f"{testBody.pos.x:.4f}, {testBody.pos.z:.4f}")
+
+    if simElapsedTime <= 4:
+        testBody.applyForceCoGLocal(Vector3(0, 0, 15))
+
+    testBody.update(simDT)
+
+    simElapsedTime += simDT
+
+    if(testBody.pos.z < 0):
+        running = False
