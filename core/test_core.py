@@ -17,14 +17,14 @@ class TestVector2(unittest.TestCase):
         self.assertEqual(Vector2(10, 20).y, 20)
 
     def test_str(self):
-        self.assertEqual(str(Vector2(0, 0)), "(0,0)")
-        self.assertEqual(str(Vector2(1, 1)), "(1,1)")
-        self.assertEqual(str(Vector2(10, 20)), "(10,20)")
+        self.assertEqual(str(Vector2(0, 0)), "(0.0,0.0)")
+        self.assertEqual(str(Vector2(1, 1)), "(1.0,1.0)")
+        self.assertEqual(str(Vector2(10, 20)), "(10.0,20.0)")
 
     def test_repr(self):
-        self.assertEqual(repr(Vector2(0, 0)), "Vector2(0,0)")
-        self.assertEqual(repr(Vector2(1, 1)), "Vector2(1,1)")
-        self.assertEqual(repr(Vector2(10, 20)), "Vector2(10,20)")
+        self.assertEqual(repr(Vector2(0, 0)), "Vector2(0.0,0.0)")
+        self.assertEqual(repr(Vector2(1, 1)), "Vector2(1.0,1.0)")
+        self.assertEqual(repr(Vector2(10, 20)), "Vector2(10.0,20.0)")
 
     def test_eq(self):
         self.assertTrue(Vector2(0, 0) == Vector2(0, 0))
@@ -71,7 +71,7 @@ class TestVector2(unittest.TestCase):
         self.assertEqual(Vector2(1, 0).normalized(), Vector2(1, 0))
         self.assertEqual(Vector2(0, 2).normalized(), Vector2(0, 1))
         self.assertEqual(Vector2(3, 4).normalized(), Vector2(3/5, 4/5))
-        self.assertRaises(ZeroDivisionError, Vector2.normalized, Vector2(0, 0))
+        self.assertEqual(Vector2(0, 0).normalized(), Vector2.Zero())
 
     def test_dot(self):
         self.assertEqual(Vector2(0, 0).dot(Vector2(0, 0)), 0)
@@ -95,14 +95,14 @@ class TestVector3(unittest.TestCase):
         self.assertEqual(Vector3(10, 20, 30).z, 30)
 
     def test_str(self):
-        self.assertEqual(str(Vector3(0, 0, 0)), "(0,0,0)")
-        self.assertEqual(str(Vector3(1, 1, 1)), "(1,1,1)")
-        self.assertEqual(str(Vector3(10, 20, 30)), "(10,20,30)")
+        self.assertEqual(str(Vector3(0, 0, 0)), "(0.0,0.0,0.0)")
+        self.assertEqual(str(Vector3(1, 1, 1)), "(1.0,1.0,1.0)")
+        self.assertEqual(str(Vector3(10, 20, 30)), "(10.0,20.0,30.0)")
 
     def test_repr(self):
-        self.assertEqual(repr(Vector3(0, 0, 0)), "Vector3(0,0,0)")
-        self.assertEqual(repr(Vector3(1, 1, 1)), "Vector3(1,1,1)")
-        self.assertEqual(repr(Vector3(10, 20, 30)), "Vector3(10,20,30)")
+        self.assertEqual(repr(Vector3(0, 0, 0)), "Vector3(0.0,0.0,0.0)")
+        self.assertEqual(repr(Vector3(1, 1, 1)), "Vector3(1.0,1.0,1.0)")
+        self.assertEqual(repr(Vector3(10, 20, 30)), "Vector3(10.0,20.0,30.0)")
 
     def test_eq(self):
         self.assertTrue(Vector3(0, 0, 0) == Vector3(0, 0, 0))
@@ -151,7 +151,7 @@ class TestVector3(unittest.TestCase):
         self.assertEqual(Vector3(0, 2, 0).normalized(), Vector3(0, 1, 0))
         self.assertEqual(Vector3(0, 0, 3).normalized(), Vector3(0, 0, 1))
         self.assertEqual(Vector3(2, 3, 6).normalized(), Vector3(2/7, 3/7, 6/7))
-        self.assertRaises(ZeroDivisionError, Vector3.normalized, Vector3(0, 0, 0))
+        self.assertEqual(Vector3(0, 0, 0).normalized(), Vector3.Zero())
 
     def test_dot(self):
         self.assertEqual(Vector3(0, 0, 0).dot(Vector3(0, 0, 0)), 0)

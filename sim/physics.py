@@ -57,20 +57,21 @@ class Rigidbody:
     """
 
     mass : float = 1
-    moi : float = 1
     gravity : bool = True
 
     pos : Vector3 = Vector3.Zero()
     vel : Vector3 = Vector3.Zero()
-
-    ori : Vector3 = Vector3.Zero()
-    oriQuat : Quaternion = Quaternion.Zero()
-    angularVel : Vector3 = Vector3.Zero()
-
     acc : Vector3 = Vector3.Zero()
+
+    moi : Vector3 = Vector3(1, 1, 1)
+
+    ori : Quaternion = Quaternion.Zero()
+    spin : Quaternion = Quaternion.Zero()
+    angularVel : Vector3 = Vector3.Zero()
     angularAcc : Vector3 = Vector3.Zero()
 
-    def __init__(self, mass : float = 1, pos : Vector3 = Vector3(0, 0, 0), vel : Vector3 = Vector3(0, 0, 0), ori : Union[Vector3, Quaternion] = Vector3(0, 0, 0)) -> None:
+
+    def __init__(self, mass : float = 1, moi : Union[float, Vector3] = 1, gravity : bool = True, pos : Vector3 = Vector3(0, 0, 0), vel : Vector3 = Vector3(0, 0, 0), ori : Quaternion = Quaternion.Zero()) -> None:
         """
         Construct all necessary attributes for a Rigidbody object
 
@@ -86,15 +87,19 @@ class Rigidbody:
             Rotation of the rigidbody about its CoG
         """
 
-        self.mass = mass
+        self.mass = float(mass)
+
         self.pos = pos
         self.vel = vel
 
-        if isinstance(ori, Quaternion):
-            self.ori = ori.ToAxisAngle()
+        if isinstance(moi, Vector3):
+            self.moi = moi
         else:
-            self.ori = ori
-        self.oriQuat = Quaternion.FromAxisAngle(self.ori.norm(), self.ori.normalized())
+            self.moi = Vector3(moi, moi, moi)
+        
+        self.ori = ori
+
+        self.gravity = gravity
 
     def update(self, dt : float) -> None:
         """
@@ -115,9 +120,8 @@ class Rigidbody:
         self.pos += self.vel * dt
 
         self.angularVel += self.angularAcc * dt
-        self.ori += self.angularVel * dt
-
-        self.oriQuat = Quaternion.FromAxisAngle(self.ori.norm(), self.ori.normalized())
+        
+        self.ori *= Quaternion.FromRotationVector(self.angularVel * dt)
 
         # Reset acceleration every timestep so next forces/gravity work properly
         self.acc = Vector3.Zero()
@@ -143,7 +147,7 @@ class Rigidbody:
         force : Vector3
             The force (in Newtons) to apply to this Rigidbody
         """
-        inertialForce = force * self.oriQuat
+        inertialForce = force * self.ori
         self.applyForceCoM(inertialForce)
 
     def applyTorque(self, torque : Vector3) -> None:
@@ -155,7 +159,8 @@ class Rigidbody:
         torque : Vector3
             The torque (in Newton-meters) to apply to this Rigidbody
         """
-        self.angularAcc += torque / float(self.moi)
+        torqueAcc = Vector3(torque.x / self.moi.x, torque.y / self.moi.y, torque.z / self.moi.z)
+        self.angularAcc += torqueAcc
 
     def applyTorqueLocal(self, torque : Vector3) -> None:
         """
@@ -166,7 +171,7 @@ class Rigidbody:
         torque : Vector3
             The torque (in Newton-meters) to apply to this Rigidbody
         """
-        inertialTorque = torque * self.oriQuat
+        inertialTorque = torque * self.ori
         self.applyTorque(inertialTorque)
 
     def applyForce(self, force : Vector3, dis : Vector3) -> None:
@@ -195,8 +200,8 @@ class Rigidbody:
         dis : Vector3
             The displacement (in meters) of the point to which the force is applied
         """
-        inertialForce = force * self.oriQuat
-        inertialDis = dis * self.oriQuat
+        inertialForce = force * self.ori
+        inertialDis = dis * self.ori
         self.applyForce(inertialForce, inertialDis)
 
     

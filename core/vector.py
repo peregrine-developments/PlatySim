@@ -7,6 +7,7 @@ Created on Thu Sep 9 22:01:00 2021
 from __future__ import annotations
 from dataclasses import dataclass
 
+from numbers import Number
 import math
 
 @dataclass
@@ -50,8 +51,8 @@ class Vector2:
             y component of the vector
         """
 
-        self.x = x
-        self.y = y
+        self.x = float(x)
+        self.y = float(y)
 
     @classmethod
     def Zero(cls) -> Vector2:
@@ -172,9 +173,9 @@ class Vector2:
             Componentwise scalar multiplication of operands
         """
 
-        if not isinstance(other, float):
+        if not isinstance(other, Number):
             return NotImplemented
-        return Vector2(self.x * other, self.y * other)
+        return Vector2(self.x * float(other), self.y * float(other))
 
     def __truediv__(self, other : float) -> Vector2:
         """
@@ -191,9 +192,9 @@ class Vector2:
             Componentwise scalar division of operands
         """
 
-        if not isinstance(other, float):
+        if not isinstance(other, Number):
             return NotImplemented
-        return Vector2(self.x / other, self.y / other)
+        return Vector2(self.x / float(other), self.y / float(other))
 
     def norm(self) -> float:
         """
@@ -306,9 +307,9 @@ class Vector3:
             z component of the vector
         """
 
-        self.x = x
-        self.y = y
-        self.z = z
+        self.x = float(x)
+        self.y = float(y)
+        self.z = float(z)
 
     @classmethod
     def Zero(cls) -> Vector3:
@@ -429,9 +430,9 @@ class Vector3:
             Componentwise scalar multiplication of operands
         """
 
-        if not isinstance(other, float):
+        if not isinstance(other, Number):
             return NotImplemented
-        return Vector3(self.x * other, self.y * other, self.z * other)
+        return Vector3(self.x * float(other), self.y * float(other), self.z * float(other))
 
     def __truediv__(self, other : float) -> Vector3:
         """
@@ -448,9 +449,9 @@ class Vector3:
             Componentwise scalar division of operands
         """
 
-        if not isinstance(other, float):
+        if not isinstance(other, Number):
             return NotImplemented
-        return Vector3(self.x / other, self.y / other, self.z / other)
+        return Vector3(self.x / float(other), self.y / float(other), self.z / float(other))
 
     def norm(self) -> float:
         """

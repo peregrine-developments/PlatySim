@@ -6,8 +6,9 @@ Created on Thu Sep 9 22:35:27 2021
 """
 from __future__ import annotations
 from dataclasses import dataclass
-from typing import Union, overload
+from typing import Union, Optional, overload
 
+from numbers import Number
 import math
 
 from .vector import *
@@ -72,10 +73,10 @@ class Quaternion:
             z imaginary component of the quaternion
         """
 
-        self.w = w
-        self.x = x
-        self.y = y
-        self.z = z
+        self.w = float(w)
+        self.x = float(x)
+        self.y = float(y)
+        self.z = float(z)
 
     @classmethod
     def FromVector(cls, other : Vector3) -> Quaternion:
@@ -94,7 +95,19 @@ class Quaternion:
         return cls((cr * cp * cy) + (sr * sp * sy), (sr * cp * cy) - (cr * sp * sy), (cr * sp * cy) + (sr * cp * sy), (cr * cp * sy) - (sr * sp * cy))
 
     @classmethod
-    def FromAxisAngle(cls, angle : float, x : Union[float, Vector3], y : float = None, z : float = None) -> Quaternion:
+    def FromRotationVector(cls, x : Union[float, Vector3], y : Optional[float] = None, z : Optional[float] = None) -> Quaternion:
+        if (isinstance(x, Vector3) and x == Vector3.Zero()) or (x == 0 and y == 0 and z == 0):
+            return Quaternion.Zero()
+
+        if isinstance(x, Vector3):
+            return cls.FromAxisAngle(x.norm(), x.normalized())
+        elif x is not None and y is not None and z is not None:
+            vec = Vector3(x, y, z)
+            return cls.FromAxisAngle(vec.norm(), vec.normalized())
+        return NotImplemented
+
+    @classmethod
+    def FromAxisAngle(cls, angle : float, x : Union[float, Vector3], y : Optional[float] = None, z : Optional[float] = None) -> Quaternion:
         if angle == 0 or (isinstance(x, Vector3) and x == Vector3.Zero()) or (x == 0 and y == 0 and z == 0):
             return Quaternion.Zero()
 
@@ -102,7 +115,9 @@ class Quaternion:
 
         if isinstance(x, Vector3):
             return cls(math.cos(angle / 2), x.x * sa, x.y * sa, x.z * sa)
-        return cls(math.cos(angle / 2), x * sa, y * sa, z * sa)
+        elif x is not None and y is not None and z is not None:
+            return cls(math.cos(angle / 2), x * sa, y * sa, z * sa)
+        return NotImplemented
 
     def ToAxisAngle(self) -> Vector3:
         angle = math.acos(self.w) * 2
@@ -232,9 +247,8 @@ class Quaternion:
         Quaternion
             Resultant multiplication of operands
         """
-        if isinstance(other, float):
-            return Quaternion(self.w * other, self.x * other, self.y * other, self.z * other)
-        elif isinstance(other, Quaternion):
+        
+        if isinstance(other, Quaternion):
             ret = Quaternion()
 
             ret.w = (self.w * other.w) - (self.x * other.x) - (self.y * other.y) - (self.z * other.z)
@@ -243,6 +257,8 @@ class Quaternion:
             ret.z = (self.w * other.z) + (self.x * other.y) - (self.y * other.x) + (self.z * other.w)
 
             return ret
+        elif isinstance(other, Number):
+            return Quaternion(self.w * float(other), self.x * float(other), self.y * float(other), self.z * float(other))
         else:
             return NotImplemented
 
@@ -282,9 +298,9 @@ class Quaternion:
             Componentwise scalar division of operands
         """
 
-        if not isinstance(other, float):
+        if not isinstance(other, Number):
             return NotImplemented
-        return Quaternion(self.w / other, self.x / other, self.y / other, self.z / other)
+        return Quaternion(self.w / float(other), self.x / float(other), self.y / float(other), self.z / float(other))
 
     def norm(self) -> float:
         """
