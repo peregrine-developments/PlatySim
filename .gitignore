@@ -1,3 +1,4 @@
 *.pyc
 .vscode/*
 workspace.code-workspace
+data.csv

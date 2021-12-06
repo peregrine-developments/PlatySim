@@ -6,7 +6,7 @@ Created on Thu Sep 9 22:35:27 2021
 """
 from __future__ import annotations
 from dataclasses import dataclass
-from typing import Union, Optional, overload
+from typing import Union, Tuple, Optional
 
 from numbers import Number
 import math
@@ -80,10 +80,40 @@ class Quaternion:
 
     @classmethod
     def FromVector(cls, other : Vector3) -> Quaternion:
+        """
+        Construct a Quaternion object from a given Vector3
+
+        Parameters
+        ----------
+        other : Vector3
+            Vector3 to store in returned Quaternion
+
+        Returns
+        -------
+        Quaternion
+            Stored Vector3 in Quaternion form
+        """
         return cls(0, other.x, other.y, other.z)
 
     @classmethod
     def FromEuler(cls, yaw : float, pitch : float, roll : float) -> Quaternion:
+        """
+        Construct a Quaternion object from a set of euler angles in radians
+
+        Parameters
+        ----------
+        yaw : float
+            Yaw component of the  euler angles
+        pitch : float
+            Pitch component of the euler angles
+        roll : float
+            Roll component of the euler angles
+
+        Returns
+        -------
+        Quaternion
+            Converted euler rotation in Quaternion form
+        """
         cy = math.cos(yaw / 2)
         cp = math.cos(pitch / 2)
         cr = math.cos(roll / 2)
@@ -94,8 +124,51 @@ class Quaternion:
 
         return cls((cr * cp * cy) + (sr * sp * sy), (sr * cp * cy) - (cr * sp * sy), (cr * sp * cy) + (sr * cp * sy), (cr * cp * sy) - (sr * sp * cy))
 
+    def ToEuler(self) -> Tuple[float, float, float]:
+        """
+        Convert a Quaternion object to a set of euler angles
+        
+        Returns
+        -------
+        Tuple[float, float, float]
+            Euler rotation components in yaw, pitch, roll order
+        """
+        sinr_cosp = 2 * (self.w * self.x + self.y * self.z)
+        cosr_cosp = 1 - 2 * (self.x * self.x + self.y * self.y)
+
+        roll = math.atan2(sinr_cosp, cosr_cosp)
+
+        sinp = 2 * (self.w * self.y - self.z * self.x)
+        if abs(sinp) >= 1:
+            pitch = math.copysign(math.pi / 2, sinp)
+        else:
+            pitch = math.asin(sinp)
+
+        siny_cosp = 2 * (self.w * self.z + self.x * self.y)
+        cosy_cosp = 1 - 2 * (self.y * self.y + self.z * self.z)
+        yaw = math.atan2(siny_cosp, cosy_cosp)
+
+        return yaw, pitch, roll
+
     @classmethod
     def FromRotationVector(cls, x : Union[float, Vector3], y : Optional[float] = None, z : Optional[float] = None) -> Quaternion:
+        """
+        Construct a Quaternion object from a given rotation vector
+
+        Parameters
+        ----------
+        x : float OR Vector3
+            If float, x component of vector, if Vector3, entire input vector
+        y : float
+            If x float, y component of vector
+        z : float
+            If x float, z component of vector
+
+        Returns
+        -------
+        Quaternion
+            Converted rotation vector in Quaternion form
+        """
         if (isinstance(x, Vector3) and x == Vector3.Zero()) or (x == 0 and y == 0 and z == 0):
             return Quaternion.Zero()
 
@@ -106,8 +179,40 @@ class Quaternion:
             return cls.FromAxisAngle(vec.norm(), vec.normalized())
         return NotImplemented
 
+    def ToRotationVector(self) -> Vector3:
+        """
+        Convert a Quaternion object to a rotation vector
+        
+        Returns
+        -------
+        Vector3
+            Representative rotation vector of Quaternion
+        """
+        angle, axis = self.ToAxisAngle()
+
+        return axis * angle
+
     @classmethod
     def FromAxisAngle(cls, angle : float, x : Union[float, Vector3], y : Optional[float] = None, z : Optional[float] = None) -> Quaternion:
+        """
+        Construct a Quaternion object from a given axis-angle representation
+
+        Parameters
+        ----------
+        angle : float
+            Angle of the axis-angle representation
+        x : float OR Vector3
+            If float, x component of axis vector, if Vector3, entire input vector
+        y : float
+            If x float, y component of axis vector
+        z : float
+            If x float, z component of axis vector
+
+        Returns
+        -------
+        Quaternion
+            Converted axis-angle in Quaternion form
+        """
         if angle == 0 or (isinstance(x, Vector3) and x == Vector3.Zero()) or (x == 0 and y == 0 and z == 0):
             return Quaternion.Zero()
 
@@ -119,18 +224,34 @@ class Quaternion:
             return cls(math.cos(angle / 2), x * sa, y * sa, z * sa)
         return NotImplemented
 
-    def ToAxisAngle(self) -> Vector3:
+    def ToAxisAngle(self) -> Tuple[float, Vector3]:
+        """
+        Convert a Quaternion object to an axis-angle representation
+        
+        Returns
+        -------
+        Tuple[float, Vector3]
+            Axis-angle representation in angle, axis order
+        """
         angle = math.acos(self.w) * 2
 
         if angle == 0:
-            return Vector3.Zero()
+            return 0, Vector3.Zero()
 
         sa = math.sin(angle / 2)
 
-        return Vector3(self.x / sa, self.y / sa, self.z / sa).normalized() * angle
+        return angle, Vector3(self.x / sa, self.y / sa, self.z / sa).normalized()
 
     @classmethod
     def Zero(cls) -> Quaternion:
+        """
+        Return a Quaternion which does not rotate
+        
+        Returns
+        -------
+        Quaternion
+            Zero-rotation quaternion
+        """
         return cls(1, 0, 0, 0)
 
     def __str__(self) -> str:
