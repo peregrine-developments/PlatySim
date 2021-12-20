@@ -12,16 +12,37 @@ import matplotlib.pyplot as plt
 data = csv.DictReader(open("data.csv"))
 
 # split the data into three lists for x, y, and z
-x = []
-y = []
-z = []
-for row in data:
-    x.append(float(row["x"]))
-    y.append(float(row["y"]))
-    z.append(float(row["z"]))
+dataArrays = {"time": [], "x": [], "y": [], "z": [], "vx": [], "vy": [], "vz": [], "ax": [], "ay": [], "az": []}
 
-# create a 3d line plot with the x, y, and z values
-fig = plt.figure()
-ax = fig.add_subplot(111, projection='3d')
-ax.plot(x, y, z)
+for row in data:
+    for key in dataArrays:
+        dataArrays[key].append(float(row[key]))
+
+# Plot x, y, and z velocity
+plt.subplot(221)
+plt.title("Velocity")
+plt.xlabel("Time (s)")
+plt.ylabel("Velocity (m/s)")
+plt.plot(dataArrays["time"], dataArrays["vx"], label="x", color="red")
+plt.plot(dataArrays["time"], dataArrays["vy"], label="y", color="green")
+plt.plot(dataArrays["time"], dataArrays["vz"], label="z", color="blue")
+plt.grid(True)
+plt.legend()
+
+# Plot x, y, and z acceleration
+plt.subplot(223)
+plt.title("Acceleration")
+plt.xlabel("Time (s)")
+plt.ylabel("Acceleration (m/s^2)")
+plt.plot(dataArrays["time"], dataArrays["ax"], label="x", color="red")
+plt.plot(dataArrays["time"], dataArrays["ay"], label="y", color="green")
+plt.plot(dataArrays["time"], dataArrays["az"], label="z", color="blue")
+plt.grid(True)
+plt.legend()
+
+plt.subplot(122, projection='3d')
+plt.title("Position")
+plt.plot(dataArrays["x"], dataArrays["y"], dataArrays["z"], label="3D Trajectory", color="black")
+plt.grid(True)
+
 plt.show()

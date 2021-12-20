@@ -58,6 +58,14 @@ class Vector2:
     def Zero(cls) -> Vector2:
         return cls(0, 0)
 
+    @classmethod
+    def UnitX(cls) -> Vector2:
+        return cls(1, 0)
+
+    @classmethod
+    def UnitY(cls) -> Vector2:
+        return cls(0, 1)
+
     def __str__(self) -> str:
         """
         Return a simple string representation of a Vector2 object
@@ -119,6 +127,30 @@ class Vector2:
         if not isinstance(other, Vector2):
             return NotImplemented
         return ((self.x != other.x) or (self.y != other.y))
+
+    def __pos__(self) -> Vector2:
+        """
+        Return a positive Vector2 object
+
+        Returns
+        -------
+        Vector2
+            Positive vector
+        """
+
+        return Vector2(+self.x, +self.y)
+
+    def __neg__(self) -> Vector2:
+        """
+        Return a negated Vector2 object
+
+        Returns
+        -------
+        Vector2
+            Negated vector
+        """
+
+        return Vector2(-self.x, -self.y)
 
     def __add__(self, other : Vector2) -> Vector2:
         """
@@ -261,6 +293,25 @@ class Vector2:
             return NotImplemented
         return ((self.x * other.y) - (self.y * other.x))
 
+    def angle(self, other : Vector2) -> float:
+        """
+        Calculate and return the angle between this Vector2 and another
+
+        Parameters
+        ----------
+        other : Vector2
+            Vector2 for right-hand operand in angle calculation
+
+        Returns
+        -------
+        float
+            Calculated angle
+        """
+
+        if not isinstance(other, Vector2):
+            return NotImplemented
+        return math.acos(self.dot(other) / (self.norm() * other.norm()))
+
 @dataclass
 class Vector3:
     """
@@ -315,6 +366,18 @@ class Vector3:
     def Zero(cls) -> Vector3:
         return cls(0, 0, 0)
 
+    @classmethod
+    def UnitX(cls) -> Vector3:
+        return cls(1, 0, 0)
+
+    @classmethod
+    def UnitY(cls) -> Vector3:
+        return cls(0, 1, 0)
+    
+    @classmethod
+    def UnitZ(cls) -> Vector3:
+        return cls(0, 0, 1)
+
     def __str__(self) -> str:
         """
         Return a simple string representation of a Vector3 object
@@ -325,7 +388,8 @@ class Vector3:
             Simple string representation
         """
 
-        return ''.join(["(", str(self.x), ",", str(self.y), ",", str(self.z), ")"])
+        return ''.join(["(", str(self.x), ",",
+            str(self.y), ",", str(self.z), ")"])
         
     def __repr__(self) -> str:
         """
@@ -337,7 +401,8 @@ class Vector3:
             Comprehensive string representation
         """
         
-        return ''.join(["Vector3(", str(self.x), ",", str(self.y), ",", str(self.z), ")"])
+        return ''.join(["Vector3(", str(self.x), ",",
+            str(self.y), ",", str(self.z), ")"])
 
     def __eq__(self, other : object) -> bool:
         """
@@ -376,6 +441,30 @@ class Vector3:
         if not isinstance(other, Vector3):
             return NotImplemented
         return ((self.x != other.x) or (self.y != other.y) or (self.z != other.z))
+
+    def __pos__(self) -> Vector3:
+        """
+        Return a positive representation of a Vector3 object
+
+        Returns
+        -------
+        Vector3
+            Positive vector representation
+        """
+
+        return Vector3(+self.x, +self.y, +self.z)
+
+    def __neg__(self) -> Vector3:
+        """
+        Return a negative representation of a Vector3 object
+
+        Returns
+        -------
+        Vector3
+            Negative vector representation
+        """
+
+        return Vector3(-self.x, -self.y, -self.z)
 
     def __add__(self, other : Vector3) -> Vector3:
         """
@@ -517,3 +606,22 @@ class Vector3:
         if not isinstance(other, Vector3):
             return NotImplemented
         return Vector3((self.y * other.z) - (self.z * other.y), (self.z * other.x) - (self.x * other.z), (self.x * other.y) - (self.y * other.x))
+
+    def angle(self, other : Vector3) -> float:
+        """
+        Calculate and return the angle between this Vector3 and another
+
+        Parameters
+        ----------
+        other : Vector3
+            Vector3 for right-hand operand in angle calculation
+
+        Returns
+        -------
+        float
+            Resultant angle
+        """
+
+        if not isinstance(other, Vector3):
+            return NotImplemented
+        return math.acos(self.dot(other) / (self.norm() * other.norm()))

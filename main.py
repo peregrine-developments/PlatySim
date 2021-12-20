@@ -12,7 +12,7 @@ import csv
 
 from core.vector import *
 from core.quaternion import *
-from sim.physics import Rigidbody
+from sim.physics import *
 
 from typing import List, Dict
 
@@ -23,15 +23,15 @@ running = True
 simElapsedTime = 0.0
 simDT = 0.01
 
-testBody = Rigidbody()
+testBody = AerodynamicRigidbody(mass = 10, pos = Vector3(0, 0, 1000), vel=Vector3(30, 20, 0), dragCoeff = lambda aoa : 0.1)
 
-data : List[Dict[str, float]] = [{"time": 0, "x": testBody.pos.x, "y": testBody.pos.y, "z": testBody.pos.z}]
+data : List[Dict[str, float]] = []
 
 while running:
-    testBody.applyForceCoMLocal(Vector3(0, 0, 9.8))
-
     testBody.update(simDT)
-    data.append({"time": simElapsedTime, "x": testBody.pos.x, "y": testBody.pos.y, "z": testBody.pos.z})
+    data.append({"time": simElapsedTime, "x": testBody.pos.x, "y": testBody.pos.y, "z": testBody.pos.z,
+                 "vx": testBody.vel.x, "vy": testBody.vel.y, "vz": testBody.vel.z,
+                 "ax": testBody.lastAcc.x, "ay": testBody.lastAcc.y, "az": testBody.lastAcc.z})
 
     if testBody.pos.z < 0 or simElapsedTime >= 60:
         running = False
